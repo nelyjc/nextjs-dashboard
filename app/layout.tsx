@@ -1,6 +1,5 @@
 import './ui/global.css';
-import { inter } from './ui/fonts';
-
+import { inter } from '@/app/ui/fonts';
 
 // export const inter = Inter({ subsets: ['latin'] });
 
