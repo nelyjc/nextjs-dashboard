@@ -6,7 +6,6 @@ import { lusitana } from '@/app/ui/fonts';
 import { InvoicesTableSkeleton } from '@/app/ui/skeletons';
 import { Suspense } from 'react';
 import { fetchInvoicesPages } from '@/app/lib/data';
-import {PaginationProps} from '@/app/ui/invoices/pagination';
 import { Metadata } from 'next'; 
 
  

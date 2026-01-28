@@ -19,25 +19,5 @@ export const authConfig = {
       return true;
     },
   },
-  providers: [
-    Credentials({
-      name: "Credentials",
-      credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" },
-      },
-      async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) return null;
-
-        const user = await getUser(credentials.email);
-        if (!user) return null;
-
-        const valid = await bcrypt.compare(credentials.password, user.password);
-        if (valid) return user;
-
-        return null;
-      },
-    }),
-
-  ], // Add providers with an empty array for now
+  providers: [], // Add providers with an empty array for now
 } satisfies NextAuthConfig;

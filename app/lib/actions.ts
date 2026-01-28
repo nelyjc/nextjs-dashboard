@@ -9,6 +9,15 @@ import { AuthError } from 'next-auth';
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
+export type State = {
+  errors?: {
+    customerId?: string[];
+    amount?: string[];
+    status?: string[];
+  };
+  message?: string;
+};
+
 const FormSchema = z.object({
   id: z.string(),
   customerId: z.string({
