@@ -1,15 +1,16 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { authConfig } from "@/auth.config"; // adjust path if needed
+import { authConfig } from "@/auth.config"; // adjust if needed
 import { z } from "zod";
 import bcrypt from "bcrypt";
 import postgres from "postgres";
 import type { User } from "@/app/lib/definitions";
+import type { NextRequest } from "next/server";
 
-// Connect to your Postgres database
+// Postgres connection
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: "require" });
 
-// Helper to fetch user by email
+// Fetch user by email
 async function getUser(email: string): Promise<User | undefined> {
   try {
     const result = await sql<User[]>`SELECT * FROM users WHERE email = ${email}`;
@@ -20,8 +21,8 @@ async function getUser(email: string): Promise<User | undefined> {
   }
 }
 
-// Export NextAuth handler
-const handler = NextAuth({
+// NextAuth handler for App Router
+const authHandler = NextAuth({
   ...authConfig,
   providers: [
     Credentials({
@@ -44,11 +45,17 @@ const handler = NextAuth({
         const passwordsMatch = await bcrypt.compare(password, user.password);
         if (!passwordsMatch) return null;
 
-        return user; // returns user object to session
+        return user;
       },
     }),
   ],
-  secret: process.env.AUTH_SECRET_KEY, // make sure this exists on Vercel
+  secret: process.env.AUTH_SECRET_KEY,
 });
 
-export { handler as GET, handler as POST };
+// Adapter for App Router: wrap in async function
+export async function GET(request: NextRequest) {
+  return authHandler(request);
+}
+export async function POST(request: NextRequest) {
+  return authHandler(request);
+}
