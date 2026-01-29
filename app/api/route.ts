@@ -1,7 +1,15 @@
-// app/api/route.ts
-import NextAuth from "next-auth";
-import { authConfig } from "@/auth.config";
+import { NextRequest } from 'next/server';
+import NextAuth from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import { authConfig } from '@/authConfig'; // make sure path is correct
 
-const handler = NextAuth(authConfig);
+// Wrap NextAuth for App Router
+const handler = (req: NextRequest) => NextAuth(authConfig)(req);
 
-export { handler as GET, handler as POST };
+export async function GET(req: NextRequest) {
+  return handler(req);
+}
+
+export async function POST(req: NextRequest) {
+  return handler(req);
+}
